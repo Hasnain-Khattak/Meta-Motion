@@ -95,7 +95,59 @@ del gyro_df['time (01:00)']
 # Turn into function
 # --------------------------------------------------------------
 
+files = glob('../Raw/MetaMotion/*.csv')
 
+def read_data(files):
+    ## acc stands for Accelerometer DataFrame
+    acc_df = pd.DataFrame()
+
+    ###gyro stands for gyroscope DataFrame
+    gyro_df = pd.DataFrame()
+
+    ## Creating a Counter
+    acc_set = 1
+    gyro_set = 1
+
+    for file in files:
+        participant = file.split('-')[0]
+        participant= participant.replace(data_path, "")
+        label = file.split('-')[1]
+        category = file.split('-')[2].rstrip('123').rstrip('2_MetaWear_2019')
+        df = pd.read_csv(file)
+        df['Participant']  = participant
+        df['label'] = label
+        df['category'] = category 
+        if 'Accelerometer' in file:
+            df['set'] = acc_set
+            acc_set += 1
+            acc_df = pd.concat([acc_df, df])
+        if 'Gyroscope' in file:
+            df['set'] = gyro_set
+            gyro_set += 1
+            gyro_df = pd.concat([gyro_df, df])
+
+    # --------------------------------------------------------------
+    # Working with datetimes
+    # --------------------------------------------------------------
+
+    acc_df.index  = pd.to_datetime(acc_df['epoch (ms)'], unit='ms')
+
+    gyro_df.index  = pd.to_datetime(gyro_df['epoch (ms)'], unit='ms')
+
+    # del acc_df['Unnamed: 0']
+    del acc_df['elapsed (s)']
+    del acc_df['epoch (ms)']
+    del acc_df['time (01:00)']
+
+    # del gyro_df['Unnamed: 0']
+    del gyro_df['elapsed (s)']
+    del gyro_df['epoch (ms)']
+    del gyro_df['time (01:00)']
+    
+    return acc_df, gyro_df
+    
+
+acc_df, gyro_df = read_data(files)
 # --------------------------------------------------------------
 # Merging datasets
 # --------------------------------------------------------------
