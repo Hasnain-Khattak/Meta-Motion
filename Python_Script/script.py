@@ -14,10 +14,12 @@ single_file_gyro = pd.read_csv('../Raw/MetaMotion/A-bench-heavy2-rpe8_MetaWear_2
 
 files = glob('../Raw/MetaMotion/*.csv')
 
+
 # --------------------------------------------------------------
 # Extract features from filename
 # --------------------------------------------------------------
 
+data_path = '../Raw/MetaMotion/*.csv'
 
 # --------------------------------------------------------------
 # Read all files
