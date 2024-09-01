@@ -77,8 +77,9 @@ for file in files:
 # Working with datetimes
 # --------------------------------------------------------------
 
+acc_df.index  = pd.to_datetime(acc_df['epoch (ms)'], unit='ms')
 
-
+gyro_df.index  = pd.to_datetime(gyro_df['epoch (ms)'], unit='ms')
 
 # --------------------------------------------------------------
 # Turn into function
