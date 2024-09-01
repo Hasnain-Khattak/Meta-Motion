@@ -95,7 +95,13 @@ del gyro_df['time (01:00)']
 # Turn into function
 # --------------------------------------------------------------
 
+
+### The Below function is the combination of all step above we did
+
 files = glob('../Raw/MetaMotion/*.csv')
+
+
+data_path = '../Raw/MetaMotion\\'
 
 def read_data(files):
     ## acc stands for Accelerometer DataFrame
@@ -152,6 +158,23 @@ acc_df, gyro_df = read_data(files)
 # Merging datasets
 # --------------------------------------------------------------
 
+### Merging the DataFrames
+data_merged  = pd.concat([acc_df.iloc[:, :3], gyro_df], axis=1)
+
+data_merged.columns = [
+    'acc_x',
+    'acc_y',
+    'acc_z',
+    'gyro_x',
+    'gyro_y',
+    'gyro_z',
+    'Participant',
+    'label',
+    'category',
+    'set'
+]
+
+
 
 # --------------------------------------------------------------
 # Resample data (frequency conversion)
@@ -159,6 +182,8 @@ acc_df, gyro_df = read_data(files)
 
 # Accelerometer:    12.500HZ
 # Gyroscope:        25.000Hz
+
+
 
 
 # --------------------------------------------------------------
