@@ -183,8 +183,30 @@ data_merged.columns = [
 # Accelerometer:    12.500HZ
 # Gyroscope:        25.000Hz
 
+numerical_cols = [i for i in data_merged.columns if data_merged[i].dtype != 'object']
 
+data_merged[numerical_cols].resample(rule='200ms').mean()
 
+data_merged.columns
+sampling = {
+    'acc_x': "mean",
+    'acc_y': "mean",
+    'acc_z': "mean",
+    'gyro_x': "mean",
+    'gyro_y': "mean",
+    'gyro_z': "mean",
+    
+    'Participant': 'last',
+    'label': 'last',
+    'category': 'last',
+    'set': 'last'
+}
+
+days = [g for n, g in data_merged.groupby(pd.Grouper(freq='D'))]
+
+data_resampled = pd.concat([df.resample(rule='200ms').apply(sampling).dropna() for df in days])
+
+data_resampled['set'] = data_resampled['set'].astype('int')
 
 # --------------------------------------------------------------
 # Export dataset
