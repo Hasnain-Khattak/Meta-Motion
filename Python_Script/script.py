@@ -211,3 +211,5 @@ data_resampled['set'] = data_resampled['set'].astype('int')
 # --------------------------------------------------------------
 # Export dataset
 # --------------------------------------------------------------
+
+data_resampled.to_pickle('../Data/interim-Data/01_data_processed.pkl')
