@@ -66,16 +66,49 @@ df_pca = df_lowpass.copy()
 
 PCA = PrincipalComponentAnalysis()
 
+pc_values = PCA.determine_pc_explained_variance(df_pca, predictor_columns)
 
+plt.figure(figsize=(10, 10))
+plt.plot(range(1, len(predictor_columns) + 1), pc_values)
+plt.show()
+
+df_pca = PCA.apply_pca(df_pca, predictor_columns, 3)
+
+
+## Visualizing 
+
+subset = df_pca[df_pca['set'] == 20]
+
+subset[['pca_1', 'pca_2', 'pca_3']].plot()
 
 # --------------------------------------------------------------
 # Sum of squares attributes
 # --------------------------------------------------------------
 
+df_square = df_pca.copy()
+
+acc_r = df_square['acc_x'] ** 2 + df_square['acc_y'] ** 2 + df_square['acc_z'] ** 2 
+gyro_r = df_square['gyro_x'] ** 2 + df_square['gyro_y'] ** 2 + df_square['gyro_z'] ** 2 
+
+df_square['acc_r'] = np.sqrt(acc_r)
+df_square['gyro_r'] = np.sqrt(gyro_r)
+
+subset = df_square[df_square['set'] == 40]
+
+subset[['acc_r', 'gyro_r']].plot(subplots=True)
+
 
 # --------------------------------------------------------------
 # Temporal abstraction
 # --------------------------------------------------------------
+
+df_temporal = df_square.copy()
+
+NumAbs = NumericalAbstraction()
+
+predictor_columns += ['acc_r', 'gyro_r']
+
+ 
 
 
 # --------------------------------------------------------------
